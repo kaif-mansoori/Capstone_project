@@ -3,11 +3,10 @@ name: Deploy Frontend to S3 and Invalidate CloudFront
 on:
   push:
     paths:
-      - "frontend/**"
+      - "infra/**"
     branches:
       - main
- workflow_dispatch:
-
+  workflow_dispatch:
 env:
   AWS_REGION: us-east-1
   S3_BUCKET: ${{ secrets.FRONTEND_BUCKET_NAME }}
