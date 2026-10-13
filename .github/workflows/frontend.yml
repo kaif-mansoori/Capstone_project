@@ -4,13 +4,15 @@ on:
   push:
     paths:
       - "frontend/**"
+      - ".github/workflows/frontend.yml"
     branches:
       - main
   workflow_dispatch:
+
 env:
   AWS_REGION: us-east-1
   S3_BUCKET: ${{ secrets.FRONTEND_BUCKET_NAME }}
-  CLOUDFRONT_DIST_ID: ${{ secrets.CLOUDFRONT_DIST_ID }}
+  CLOUDFRONT_DIST_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
 
 jobs:
   deploy:
@@ -30,10 +32,10 @@ jobs:
 
       - name: Sync files to S3
         run: |
-          aws s3 sync frontend/ s3://${{ env.S3_BUCKET }} --delete
+          aws s3 sync frontend/ "s3://${S3_BUCKET}" --delete
 
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id ${{ env.CLOUDFRONT_DIST_ID }} \
+            --distribution-id "${CLOUDFRONT_DIST_ID}" \
             --paths "/*"
