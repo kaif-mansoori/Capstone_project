@@ -6,6 +6,7 @@ on:
       - "infra/**"
     branches:
       - main
+  workflow_dispatch:
 
 concurrency:
   group: terraform-${{ github.ref }}
