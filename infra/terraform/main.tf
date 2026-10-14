@@ -372,3 +372,15 @@ resource "aws_lambda_permission" "allow_apigw_invoke_presign" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.presign_api.execution_arn}/*/*"
 }
+
+resource "aws_s3_bucket_cors_configuration" "upload_cors" {
+  bucket = aws_s3_bucket.upload_bucket.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT", "POST", "GET", "HEAD"]
+    allowed_origins = ["https://${aws_cloudfront_distribution.frontend_distribution.domain_name}"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+}
