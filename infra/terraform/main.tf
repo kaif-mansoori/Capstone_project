@@ -349,17 +349,18 @@ resource "aws_apigatewayv2_stage" "presign_stage" {
   auto_deploy = true
 
   default_route_settings {
-    data_trace_enabled = true
+    throttling_burst_limit = 100
+    throttling_rate_limit  = 200
   }
 
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.apigw_logs.arn
     format = jsonencode({
-      requestId      = "$context.requestId",
-      requestTime    = "$context.requestTime",
-      httpMethod     = "$context.httpMethod",
-      path           = "$context.path",
-      status         = "$context.status"
+      requestId   = "$context.requestId",
+      requestTime = "$context.requestTime",
+      httpMethod  = "$context.httpMethod",
+      path        = "$context.path",
+      status      = "$context.status"
     })
   }
 }
